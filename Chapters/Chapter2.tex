@@ -19,7 +19,7 @@
 
 在本章的开始，我们先介绍内存分离技术的研究背景，从而了解数据中心对内存资源的需求和内存分离技术出现的缘由。
 再分类地说明内存分离的研究现状，介绍内存分离不同的研究方向以及其对应的技术。
-接着，我们着重介绍再内存分离技术领域比较先进的INFINISWAP系统。
+接着，我们着重介绍再内存分离技术领域比较先进的INFINISWAP系统\cite{gu2017efficient}。
 最后我们对内存分离技术做一个总结，并提出一些我们的问题和思考。
 
 %----------------------------------------------------------------------------------------
@@ -28,7 +28,7 @@
 
 \section{背景介绍}
 
-\subsection{问题的由来}
+\subsection{问题来源}
 内存不足的现象是自内存设备出现以来就已经存在的问题。
 在过去，解决内存不足问题的目标仅仅是说让程序在内存不足的时候也能正确运行，因此产生了虚拟内存（virtual memory）、换页（paging）等技术来缓解内存不足的状况，本质是通过硬盘来暂存内存数据，这样的方法虽然解决了内存不足的问题，但性能却很差。
 
@@ -42,8 +42,8 @@
 一方面，单机上内存资源在服务器部署之后就已经基本上是确定不变的了，服务器部署运行之后再去拓展内存资源是一件麻烦而且成本大的事情。
 另一方面，单台服务器所能支持的最大内存是有限，这必然不能满足应用程序日益增长的内存需要。
 
-\subsection{问题的研究意义}
-首先，为了说明内存不足而导致换页的不利影响，有相关研究人员做了一些测试。
+\subsection{研究意义}
+首先，为了说明内存不足而导致换页的不利影响，有相关研究人员做了一些测试\cite{gu2017efficient}。
 他们选择了三种不同的内存应用程序进行测试：（i）运行在VoltDB内存数据库上的TPC-C基准测试程序；
 （ii）运行在Memcached键值仓储中的模拟facebook工作负载的程序；
 （iii）运行在PowerGraph的TunkRank算法，使用的数据集是Twitter。
@@ -52,7 +52,7 @@
 \centering
 \includegraphics[scale=0.45]{Figures/memory/memory_motivation1.png}
 \decoRule
-\caption{在不同内存容量下应用程序的性能。}
+\caption{在不同内存容量下应用程序的性能\cite{gu2017efficient}。}
 \label{fig:memory_motivation1}
 \end{figure}
 
@@ -65,7 +65,7 @@
 \centering
 \includegraphics[scale=0.6]{Figures/memory/memory_motivation2.png}
 \decoRule
-\caption{Facebook和Google的两个机器集群中存在的内存使用不均衡现象。}
+\caption{Facebook和Google的两个机器集群中存在的内存使用不均衡现象\cite{gu2017efficient}。}
 \label{fig:memory_motivation2}
 \end{figure}
 
@@ -80,13 +80,13 @@
 %	SECTION 2
 %----------------------------------------------------------------------------------------
 
-\section{当前内存分离技术的分类和对比}
+\section{当前内存分离技术的研究现状}
 
 很长一段时间以来，数据中心都在使用着一体化服务器的架构，使得大多数内存分离技术都是基于这种架构去设计并实现的，如分布式共享内存（distributed share memory）技术和远程换页（remote paging）技术。
 这些方法考虑的是易用性、可行性，不需要对现有服务器架构设计进行太大的修改。
 
 内存分离技术有多种不同维度的划分方法。
-LegoOS的研究人员按照软硬件的划分将内存分离技术分成两大类，一类是硬件辅助的内存分离技术，指的是设计一些专用的小硬件来辅助和加速内存分离；
+LegoOS\cite{shan2018legoos}的研究人员按照软硬件的划分将内存分离技术分成两大类，一类是硬件辅助的内存分离技术，指的是设计一些专用的小硬件来辅助和加速内存分离；
 另一类是纯软件实现的内存分离技术，只需要现有的硬件设备来实现内存分离。
 而INFINISWAP的研究人员则是按照实现方法划分，将内存分离技术主要分为远程内存换页技术（Remote Memory Paging）和分布式共享内存（Distributed Shared Memory）两大类。
 
@@ -118,7 +118,7 @@ LegoOS的研究人员按照软硬件的划分将内存分离技术分成两大�
 %	SECTION 3
 %----------------------------------------------------------------------------------------
 
-\section{基于RDMA高速网络的内存分离技术：INFINISWAP}
+\section{案例：基于RDMA高速网络的内存分离技术——INFINISWAP}
 
 INFINISWAP是针对RDMA高速网络设计的一个远程换页系统，通过将集群中每台机器的交换分区划分成大块去管理，适时地去收集机器中未使用的内存，并把这些内存暴露给应用程序使用。
 整个过程对于应用程序来说是透明不可见的，因而应用程序不需要做任何修改。
@@ -132,7 +132,7 @@ INFINISWAP的主要设计目标是高效地将集群中所有机器的内存都�
 \centering
 \includegraphics[scale=0.5]{Figures/memory/infiniswap_architecture.png}
 \decoRule
-\caption{INFINISWAP系统架构。}
+\caption{INFINISWAP系统架构。\cite{gu2017efficient}}
 \label{fig:infiniswap_architecture}
 \end{figure}
 
@@ -153,7 +153,7 @@ INFINISWAP守护进程是运行在用户态的一个程序，仅仅参与控制�
 它仅仅负责处理其它机器发过来的大块映射请求以及预先分配相应的内存空间。
 真正的对数据层面（data plane）的操作则是通过RDMA请求然后由网卡去执行，并不会打扰目标机器的CPU。
 
-\subsection{系统设计}
+\subsection{设计与实现}
 
 \subsubsection{透明性和隔离性设计}
 \paragraph{透明性}
@@ -179,7 +179,7 @@ INFINISWAP对应用程序是透明的，应用程序认为远端机器上面的�
 \centering
 \includegraphics[scale=0.3]{Figures/memory/infiniswap_slab_mapping.png}
 \decoRule
-\caption{INFINISWAP块映射策略。}
+\caption{INFINISWAP块映射策略\cite{gu2017efficient}。}
 \label{fig:infiniswap_slab_mapping}
 \end{figure}
 
@@ -187,7 +187,7 @@ INFINISWAP对应用程序是透明的，应用程序认为远端机器上面的�
 \centering
 \includegraphics[scale=0.3]{Figures/memory/infiniswap_slab_eviction.png}
 \decoRule
-\caption{INFINISWAP块淘汰策略。}
+\caption{INFINISWAP块淘汰策略\cite{gu2017efficient}。}
 \label{fig:infiniswap_slab_eviction}
 \end{figure}
 
@@ -200,7 +200,7 @@ INFINISWAP使用了\emph{power-of-choices}的技术来作为块映射以及块�
 比如\emph{power-of-two}的块映射策略，会先随机地选择两台远程机器，比较两台机器的内存使用情况，然后选择内存使用较少的一台机器作为目标机器来进行块映射。
 类似地，块淘汰策略也是使用了\emph{power-of-choices}的方法。
 
-\subsection{系统测评}
+\subsection{系统评测}
 测试使用32台机器的集群，机器之间用56Gbps的Infiniswap网卡连接。
 每台机器有2个NUMA节点和64GB的内存，每个NUMA节点有8个物理CPU，一共32个vCPU。
 
@@ -208,7 +208,7 @@ INFINISWAP使用了\emph{power-of-choices}的技术来作为块映射以及块�
 \centering
 \includegraphics[scale=0.4]{Figures/memory/infiniswap_evaluation1.png}
 \decoRule
-\caption{应用程序的性能}
+\caption{应用程序的性能\cite{gu2017efficient}。}
 \label{fig:infiniswap_evaluation1}
 \end{figure}
 
@@ -226,7 +226,7 @@ INFINISWAP使用了\emph{power-of-choices}的技术来作为块映射以及块�
 \centering
 \includegraphics[scale=0.3]{Figures/memory/infiniswap_evaluation2.png}
 \decoRule
-\caption{集群的内存使用情况}
+\caption{集群的内存使用情况\cite{gu2017efficient}。}
 \label{fig:infiniswap_evaluation2}
 \end{figure}
 
@@ -236,3 +236,14 @@ INFINISWAP使用了\emph{power-of-choices}的技术来作为块映射以及块�
 %----------------------------------------------------------------------------------------
 
 \section{本章小结}
+
+本章介绍了内存分离的背景、研究现状和技术案例，说明了内存分离的重要性和可行性。
+当下，内存分离技术正逐渐成为服务器架构的一种演变趋势，因为数据中心正迫切地想让资源能够更有效地利用。
+
+实现内存分离有很多种技术方案，但无论哪种方案，都需要依靠网络来进行数据传输。
+向前推动内存分离技术发展的重要技术动力是网络的发展。
+虽然内存分离并不一定得要高速的网络才能实现，但越来越快的网络使得内存分离真正变得更加切实可行。
+
+另外一方面，要打破传统的思维约束，使用革新方法去解决问题。
+内存不足以及内存使用不均衡的根本原因是一体化服务器的架构，基于这样的架构去实现内存分离只是缓解了问题，并没有从根本上去解决。
+在后面的章节中，我们将介绍LegoOS，看看如何从根本上去解决内存的相关问题。
