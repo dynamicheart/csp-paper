@@ -102,8 +102,8 @@ NAS模式与SAN模式最大的区别在于NAS模式的文件系统位于存储�
 %-----------------------------------
 %	SUBSUBSECTION 1
 %-----------------------------------
-\subsubsection{Amazon EBS\cite{amazon2010amazon}}
-Amazon Elastic Block Store(EBS)块级别的储存功能，这些块直接与Amazon EC2
+\subsubsection{Amazon EBS}
+Amazon Elastic Block Store(EBS)\cite{amazon2010amazon}块级别的储存功能，这些块直接与Amazon EC2
 实例连接，保证了数据的有效性和安全性。
 Amazon EBS依据存储性能和工作负载成本为指标，提供了两类方案选择：
 一是用于事务性工作负载的SSD备份存储，例如数据库等，
@@ -112,8 +112,8 @@ Amazon EBS技术已经大量应用于Amazon的关系型数据库服务中，提�
 %-----------------------------------
 %	SUBSUBSECTION 2
 %-----------------------------------
-\subsubsection{VMware Virtual SAN\cite{vmware2013vmware}}
-Virtual SAN是VMware针对存储设备解耦提出的资源存储技术。Virtual SAN
+\subsubsection{VMware Virtual SAN}
+Virtual SAN\cite{vmware2013vmware}是VMware针对存储设备解耦提出的资源存储技术。Virtual SAN
 与vSphere相互融合，聚合了虚拟化管理程序的体系结构，
 将存储设备池化为共享数据存储，提供更高的数据共享性。
 同时，读写缓存功能一定程度上缓解了SAN带来的性能损失，提供最短的IO路径。
@@ -128,8 +128,8 @@ Virtual SAN是VMware针对存储设备解耦提出的资源存储技术。Virtua
 %-----------------------------------
 %	SUBSUBSECTION 3
 %-----------------------------------
-\subsubsection{Petal:Distributed Virtual Disks\cite{lee1996petal}}
-Petal的存储架构应用了分布式的虚拟硬盘。各个服务器主机可自由地应用不同的文件系统，
+\subsubsection{Petal:Distributed Virtual Disks}
+Petal\cite{lee1996petal}的存储架构应用了分布式的虚拟硬盘。各个服务器主机可自由地应用不同的文件系统，
 通过可扩展的网络层对读写需求进行转发，下发至各个存储硬盘服务器。
 该架构对服务器主机的文件系统不做限制，并且有很好的容错率和单点错误恢复能力。
 \begin{figure}
@@ -142,8 +142,8 @@ Petal的存储架构应用了分布式的虚拟硬盘。各个服务器主机可
 %-----------------------------------
 %	SUBSUBSECTION 4
 %-----------------------------------
-\subsubsection{Parallax:Managing Storage for a Million Machines\cite{warfield2005parallax}}
-Parallax提出VM架构以管理百万数量机群的存储管理，凭借灵活轻量的快照机制和简单的分布式块存储来实现高效复制并提高可用性。
+\subsubsection{Parallax:Managing Storage for a Million Machines}
+Parallax\cite{warfield2005parallax}提出VM架构以管理百万数量机群的存储管理，凭借灵活轻量的快照机制和简单的分布式块存储来实现高效复制并提高可用性。
 但其存储机制必然引入额外性能开销，实现上对之进行权衡。
 
 \begin{figure}
@@ -156,8 +156,8 @@ Parallax提出VM架构以管理百万数量机群的存储管理，凭借灵活�
 %-----------------------------------
 %	SUBSUBSECTION 5
 %-----------------------------------
-\subsubsection{Blizzard:Block Storage\cite{mickens2014blizzard}}
-Blizzard块存储架构中，虚拟设备通过维护VID记录实际存储设备的位置，从而将得到的读写指令转发到相应的物理设备上。
+\subsubsection{Blizzard:Block Storage}
+Blizzard\cite{mickens2014blizzard}块存储架构中，虚拟设备通过维护VID记录实际存储设备的位置，从而将得到的读写指令转发到相应的物理设备上。
 对读写数据的合理缓存机制能够适当减小读写开销。同时日志机制使得系统的安全性和可靠性大幅上升，也增加了系统的容错机制。
 文章中对Blizzard块存储架构与Amazon的EBS架构进行量化对比，证明Blizzard的SQLIOPS性能远比EBS高。
 
