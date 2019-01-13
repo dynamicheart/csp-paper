@@ -144,6 +144,10 @@ headsepline, % Uncomment to get a line under the header
 %	LIST OF CONTENTS/FIGURES/TABLES PAGES
 %----------------------------------------------------------------------------------------
 
+\renewcommand{\contentsname}{目录}
+\renewcommand{\figurename}{图}
+\hypersetup{colorlinks=true,linkcolor=black}
+
 \tableofcontents % Prints the main table of contents
 
 %----------------------------------------------------------------------------------------
@@ -181,6 +185,7 @@ headsepline, % Uncomment to get a line under the header
 %	BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
 
+\renewcommand{\bibname}{参考文献}
 \printbibliography[heading=bibintoc]
 
 %----------------------------------------------------------------------------------------
