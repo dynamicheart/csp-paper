@@ -24,7 +24,7 @@
 
 \subsection{系统层面的分离}
 
-？？？
+现有的操作系统大多以单台机器为管理单元，并假设所有硬件资源都位于本地。这种体系结构从根本上不利于硬件资源的分离。比较好的方法是从底层按照分离的思路重新设计操作系统，这样不仅简化了抽象层，还可以打破单机操作系统管理分布式硬件的语义隔离，能更好地适应分离的硬件结构。但是，重新设计一套系统架构，并且能够较好的对分布式资源进行管理，是非常困难的。不过，目前已存在一些尝试，如Helios\parencite{nightingale2009helios}在NUMA架构的异构核心上构建了一组satellite kernel。
 
 %----------------------------------------------------------------------------------------
 %	SECTION 2
@@ -40,7 +40,7 @@
 
 \subsection{巨型虚拟机}
 
-针对多机的资源利用，还有一种分布式OS的方案。其原理把每台机器的硬件资源综合在一起（例如，综合所有机器实现分布式共享内存），对外则表现为一个巨型的虚拟机。结合调度，单一的任务也能够利用到不同机器的资源，提高了硬件资源的整体利用率。但是，这种设计对节点间的通信要求较高，同时调度的策略和性能也会带来很大影响。
+针对多机的资源利用，还有一种分布式操作系统的方案。其原理把每台机器的硬件资源综合在一起（例如，综合所有机器实现分布式共享内存），对外则表现为一个巨型的虚拟机。结合调度，单一的任务也能够利用到不同机器的资源，提高了硬件资源的整体利用率。但是，这种设计对节点间的通信要求较高，同时调度的策略和性能也会带来很大影响。
 
 Amoeba\parencite{tanenbaum1991amoeba}是一个例子，它在每台机器的每个处理器核上运行一个microkernel，实现了一个共享的处理器池，为每个用户动态分配处理器资源。相比于多机分布式计算，Amoeba使资源调度的粒度减小到了进程的级别。
 
@@ -88,7 +88,7 @@ LegoOS在设计上针对三种硬件组件：处理器、内存、存储，分�
 
 \begin{figure}[h]
 \centering
-\includegraphics[scale=1.00]{Figures/legoos/1.png}
+\includegraphics[scale=1.00]{Figures/legoos/pcomponent_mcomponent.png}
 \decoRule
 \caption{LegoOS pComponent and mComponent Archiecture}
 \label{fig:legoos_archiecture}
@@ -104,7 +104,7 @@ ExCache冷不命中会产生很多访问mComponent的请求，带来了较大的
 
 \begin{figure}[h]
 \centering
-\includegraphics[scale=1.00]{Figures/legoos/2.png}
+\includegraphics[scale=1.00]{Figures/legoos/memory_management.png}
 \decoRule
 \caption{LegoOS Distributed Memory Management}
 \label{fig:legoos_memory_management}
@@ -126,26 +126,26 @@ LegoOS在sComponent上实现存储功能。类似于NFS，存储服务器采用�
 
 由于并没有真正的资源分解硬件，硬件组件实际由服务器模拟而来，通过限制可用的资源使其符合各个componnet的设定。
 
-\subsubsection{基准性能}
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.50]{Figures/legoos/tensorflow_perf.png}
+\decoRule
+\caption{TensorFlow Performance}
+\label{fig:tensorflow_perf}
+\end{figure}
+
+\begin{figure}[h]
+\centering
+\includegraphics[scale=0.75]{Figures/legoos/failure_analysis.png}
+\decoRule
+\caption{Mean Time To Failure Analysis}
+\label{fig:failure_analysis}
+\end{figure}
 
 \begin{itemize}
-\item 网络性能：TODO
-\item 内存性能：
-\item 存储性能：
-\item PARSEC测试集：
+\item TensorFlow：在LegoOS上运行一个未修改的TesorFlow程序，其working set是0.9GB，为它分配了1个pComponent、1个mComponent、1个sComponent。测试的基准是一个无限内存的Linux系统。在有限的内存下，LegoOS的Slowdown显著低于其他的swap方案的OS。
+\item 故障分析：通过收集到的各硬件的平均无故障运行时间（MTTF），可以分别计算出monolithic server和LegoOS的MTTF。由于LegoOS的组件完全分离，并且资源利用率接近100\%（传统的monolithic server集群的资源利用率只有大约50\%），使得MTTF提高了17\%-49\%。
 \end{itemize}
-
-\subsubsection{应用性能}
-
-\begin{itemize}
-\item TensorFlow：
-\item Phoenix：
-\item 多任务：
-\end{itemize}
-
-\subsubsection{故障分析}
-
-TODO
 
 %----------------------------------------------------------------------------------------
 %	SECTION 3
